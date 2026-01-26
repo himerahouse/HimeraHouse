@@ -192,19 +192,25 @@ function CarCard({ car }: { car: SheetCar }) {
         </div>
 
         <div className="mt-6 flex items-center justify-between gap-3">
-          <span className="text-sm font-medium text-gray-900">
-            {car.price || "По запитване"}
-          </span>
+  <div>
+    <div className="text-xs uppercase tracking-wide text-gray-500">
+      Цена
+    </div>
+    <div className="text-lg font-semibold text-gray-900">
+      {car.price || "По запитване"}
+    </div>
+  </div>
 
-          <a
-            href={car.mobileUrl || MOBILE_BG}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white hover:bg-gray-800"
-          >
-            Виж в mobile.bg
-          </a>
-        </div>
+  <a
+    href={car.mobileUrl || MOBILE_BG}
+    target="_blank"
+    rel="noreferrer"
+    className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-gray-800"
+  >
+    Виж в mobile.bg
+  </a>
+</div>
+
       </div>
     </article>
   );
