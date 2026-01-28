@@ -134,9 +134,6 @@ export default function FAQPage() {
       });
   }, [query, activeTag]);
 
-  // Keep openIndex safe when filtering
-  const openItem = filtered[openIndex ?? -1];
-
   return (
     <main className="min-h-screen bg-white">
       {/* Header */}
@@ -224,7 +221,6 @@ export default function FAQPage() {
       <section className="bg-gray-50">
         <div className="mx-auto max-w-7xl px-6 py-12">
           <div className="mx-auto max-w-3xl">
-            {/* Result count */}
             <div className="mb-4 text-sm text-gray-600">
               Показани въпроси:{" "}
               <span className="font-semibold text-gray-900">
@@ -239,32 +235,57 @@ export default function FAQPage() {
                 return (
                   <div
                     key={item.q}
-                    className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+                    className={`overflow-hidden rounded-xl border shadow-sm transition ${
+                      isOpen
+                        ? "border-gray-300 bg-white"
+                        : "border-gray-200 bg-white"
+                    }`}
                   >
+                    {/* Header button */}
                     <button
                       type="button"
-                      className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                      className={`flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition ${
+                        isOpen ? "bg-gray-50" : "bg-white hover:bg-gray-50"
+                      }`}
                       onClick={() => setOpenIndex(isOpen ? null : idx)}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-[11px] font-medium text-gray-700">
+                        <span
+                          className={`rounded-full border px-3 py-1 text-[11px] font-medium ${
+                            isOpen
+                              ? "border-gray-300 bg-white text-gray-800"
+                              : "border-gray-200 bg-gray-50 text-gray-700"
+                          }`}
+                        >
                           {item.tag}
                         </span>
-                        <span className="text-sm font-semibold text-gray-900">
+
+                        <span
+                          className={`font-semibold ${
+                            isOpen ? "text-gray-950" : "text-gray-900"
+                          } text-[15px] sm:text-sm`}
+                        >
                           {item.q}
                         </span>
                       </div>
 
-                      <span className="text-gray-500">
+                      <span
+                        className={`transition ${
+                          isOpen ? "text-gray-700" : "text-gray-500"
+                        }`}
+                      >
                         <Chevron open={isOpen} />
                       </span>
                     </button>
 
+                    {/* Answer */}
                     {isOpen && (
-                      <div className="px-6 pb-5">
-                        <p className="text-sm leading-relaxed text-gray-600">
-                          {item.a}
-                        </p>
+                      <div className="border-t border-gray-200 px-6 pb-5 pt-4">
+                        <div className="border-l-2 border-gray-900/60 pl-4">
+                          <p className="text-sm leading-relaxed text-gray-800 font-medium">
+                            {item.a}
+                          </p>
+                        </div>
 
                         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                           <Link
@@ -328,7 +349,6 @@ export default function FAQPage() {
               </div>
             </div>
 
-            {/* Tiny footnote */}
             <p className="mt-6 text-center text-xs text-gray-500">
               Ако искате най-бърз отговор, оставете телефон/имейл в страницата
               „Контакти“.

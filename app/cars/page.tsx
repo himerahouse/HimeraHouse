@@ -7,6 +7,10 @@ import type { SheetCar } from "../../lib/carsFromSheet";
 
 const MOBILE_BG = "https://himera.mobile.bg";
 
+// ✅ Fixed dropdown options (always visible)
+const FUEL_OPTIONS = ["Бензин", "Дизел", "Хибрид", "Електрически"] as const;
+const TRANS_OPTIONS = ["Автоматик", "Ръчни"] as const;
+
 function statusLabel(status?: SheetCar["status"]) {
   switch (status) {
     case "available":
@@ -37,36 +41,56 @@ function statusClass(status?: SheetCar["status"]) {
   }
 }
 
+// Subtitle examples from your sheet:
+// "ръчни · Дизел · 2018"
+// "Автоматик · хибрид · 2018"
+// "Автоматик · електрически · 2018"
+function extractFuelFromSubtitle(subtitle?: string): (typeof FUEL_OPTIONS)[number] | "" {
+  const s = (subtitle ?? "").toLowerCase();
+
+  if (s.includes("диз")) return "Дизел";
+  if (s.includes("бенз")) return "Бензин";
+  if (s.includes("хиб")) return "Хибрид";
+  if (s.includes("елект")) return "Електрически";
+
+  return "";
+}
+
+function extractTransFromSubtitle(subtitle?: string): (typeof TRANS_OPTIONS)[number] | "" {
+  const s = (subtitle ?? "").toLowerCase();
+
+  if (s.includes("авто")) return "Автоматик";
+  if (s.includes("ръч")) return "Ръчни";
+
+  return "";
+}
+
 function CarCard({ car }: { car: SheetCar }) {
   const badge = statusLabel(car.status);
 
-  // 1) sanitize images (trim, remove empty, remove duplicates)
+  // sanitize images (trim, remove empty, remove duplicates)
   const images = useMemo(() => {
     const arr = Array.isArray(car.images) ? car.images : [];
     const cleaned = arr
-      .map((s) => (typeof s === "string" ? s.trim() : ""))
+      .map((x) => (typeof x === "string" ? x.trim() : ""))
       .filter(Boolean);
 
-    // Optional: dedupe while keeping order
     return Array.from(new Set(cleaned));
   }, [car.images]);
 
   const [active, setActive] = useState(0);
 
-  // If data updates and active index becomes out of range
   useEffect(() => {
     if (active > images.length - 1) setActive(0);
   }, [images.length, active]);
 
   const raw = images.length ? images[active] : "";
-
   const isBad =
     !raw ||
     raw.includes("example.com") ||
     raw.includes("drive.google.com/file/d/");
 
   const img = isBad ? "/cars/placeholder.png" : raw;
-
   const hasGallery = images.length > 1;
 
   function prev() {
@@ -80,7 +104,6 @@ function CarCard({ car }: { car: SheetCar }) {
   return (
     <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="relative h-56 w-full bg-gray-100">
-        {/* key forces Image to update immediately; opacity makes it feel smooth */}
         <Image
           key={img}
           src={img}
@@ -168,54 +191,27 @@ function CarCard({ car }: { car: SheetCar }) {
         <h3 className="text-base font-semibold text-gray-900">{car.title}</h3>
         <p className="mt-1 text-sm text-gray-600">{car.subtitle}</p>
 
-        <div className="mt-4 flex flex-wrap gap-2 text-xs text-gray-600">
-          {car.year ? (
-            <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1">
-              {car.year}
-            </span>
-          ) : null}
-          {car.fuel ? (
-            <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1">
-              {car.fuel}
-            </span>
-          ) : null}
-          {car.transmission ? (
-            <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1">
-              {car.transmission}
-            </span>
-          ) : null}
-          {typeof car.mileageKm === "number" ? (
-            <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1">
-              {car.mileageKm.toLocaleString("bg-BG")} км
-            </span>
-          ) : null}
-        </div>
-
         <div className="mt-6 flex items-center justify-between gap-3">
-  <div>
-    <div className="text-xs uppercase tracking-wide text-gray-500">
-      Цена
-    </div>
-    <div className="text-lg font-semibold text-gray-900">
-      {car.price || "По запитване"}
-    </div>
-  </div>
+          <div>
+            <div className="text-xs uppercase tracking-wide text-gray-500">Цена</div>
+            <div className="text-lg font-semibold text-gray-900">
+              {car.price || "По запитване"}
+            </div>
+          </div>
 
-  <a
-    href={car.mobileUrl || MOBILE_BG}
-    target="_blank"
-    rel="noreferrer"
-    className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-gray-800"
-  >
-    Виж в mobile.bg
-  </a>
-</div>
-
+          <a
+            href={car.mobileUrl || MOBILE_BG}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white transition hover:bg-gray-800"
+          >
+            Виж в mobile.bg
+          </a>
+        </div>
       </div>
     </article>
   );
 }
-
 
 export default function CarsPage() {
   const [cars, setCars] = useState<SheetCar[]>([]);
@@ -256,13 +252,20 @@ export default function CarsPage() {
     const q = query.trim().toLowerCase();
 
     return cars.filter((c) => {
-      const matchesQ =
-        !q ||
-        c.title.toLowerCase().includes(q) ||
-        (c.subtitle || "").toLowerCase().includes(q);
+      // ✅ FILTERS COME FROM SUBTITLE
+      const fuelFromSubtitle = extractFuelFromSubtitle(c.subtitle);
+      const transFromSubtitle = extractTransFromSubtitle(c.subtitle);
 
-      const matchesFuel = fuel === "all" ? true : c.fuel === fuel;
-      const matchesTrans = trans === "all" ? true : c.transmission === trans;
+      const title = (c.title ?? "").toLowerCase();
+      const subtitle = (c.subtitle ?? "").toLowerCase();
+
+      const matchesQ = !q || title.includes(q) || subtitle.includes(q);
+
+      // ✅ where it checks diesel/benz/etc:
+      const matchesFuel = fuel === "all" ? true : fuelFromSubtitle === fuel;
+
+      // ✅ where it checks automatic/manual:
+      const matchesTrans = trans === "all" ? true : transFromSubtitle === trans;
 
       return matchesQ && matchesFuel && matchesTrans;
     });
@@ -308,11 +311,12 @@ export default function CarsPage() {
             </div>
           </div>
 
+          {/* Filters */}
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Търсене (марка, модел...)"
+              placeholder="Търсене (марка, модел, година...)"
               className="h-11 w-full rounded-md border border-gray-200 px-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
             />
 
@@ -322,10 +326,11 @@ export default function CarsPage() {
               className="h-11 w-full rounded-md border border-gray-200 px-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
             >
               <option value="all">Гориво (всички)</option>
-              <option value="Бензин">Бензин</option>
-              <option value="Дизел">Дизел</option>
-              <option value="Хибрид">Хибрид</option>
-              <option value="Електрически">Електрически</option>
+              {FUEL_OPTIONS.map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
             </select>
 
             <select
@@ -334,8 +339,11 @@ export default function CarsPage() {
               className="h-11 w-full rounded-md border border-gray-200 px-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
             >
               <option value="all">Скоростна кутия (всички)</option>
-              <option value="Автоматик">Автоматик</option>
-              <option value="Ръчни">Ръчни</option>
+              {TRANS_OPTIONS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
             </select>
 
             <a
@@ -371,32 +379,6 @@ export default function CarsPage() {
               Няма намерени резултати. Опитайте с друга ключова дума или филтри.
             </div>
           )}
-
-          <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Не намирате търсения автомобил?
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Изпратете запитване и ще ви предложим варианти според бюджет и
-              изисквания — включително внос по заявка.
-            </p>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-800"
-              >
-                Свържете се с нас
-              </Link>
-              <a
-                href={MOBILE_BG}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-50"
-              >
-                Всички обяви в mobile.bg
-              </a>
-            </div>
-          </div>
         </div>
       </section>
     </main>
