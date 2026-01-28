@@ -147,7 +147,7 @@ export default function LeasingPage() {
           </div>
 
           {/* Process / Steps */}
-          <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+          {/* <div className="mt-10 rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
             <h2 className="text-xl font-semibold text-gray-900">
               Как протича процесът
             </h2>
@@ -196,7 +196,7 @@ export default function LeasingPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* CTA */}
           <div className="mt-10 rounded-2xl border border-gray-200 bg-gray-900 p-8 shadow-sm">
