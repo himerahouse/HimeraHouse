@@ -87,7 +87,7 @@ function Icon({ name }: { name: "pin" | "phone" | "mail" | "clock" | "link" }) {
 }
 
 export default function ContactPage() {
-  const FORM_ENDPOINT = "https://formspree.io/f/mojwzlr1";
+  const FORM_ENDPOINT = "https://formspree.io/f/mojwzlrl";
 
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
