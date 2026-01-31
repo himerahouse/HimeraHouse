@@ -87,11 +87,47 @@ function Icon({ name }: { name: "pin" | "phone" | "mail" | "clock" | "link" }) {
 }
 
 export default function ContactPage() {
-  const [status, setStatus] = useState<"idle" | "sent">("idle");
+  const FORM_ENDPOINT = "https://formspree.io/f/mojwzlr1";
 
-  function onSubmit(e: React.FormEvent) {
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus("sent");
+    setStatus("sending");
+    setErrorMsg("");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    // Honeypot anti-spam (bots often fill hidden fields)
+    if (formData.get("company")) {
+      setStatus("error");
+      setErrorMsg("Грешка при изпращане. Опитайте отново.");
+      return;
+    }
+
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+
+      if (res.ok) {
+        setStatus("sent");
+        form.reset();
+      } else {
+        const data = await res.json().catch(() => null);
+        setStatus("error");
+        setErrorMsg(data?.error || "Неуспешно изпращане. Опитайте отново.");
+      }
+    } catch {
+      setStatus("error");
+      setErrorMsg("Грешка при връзката. Опитайте отново.");
+    }
   }
 
   return (
@@ -163,7 +199,9 @@ export default function ContactPage() {
                     <Icon name="link" />
                   </span>
                   <div>
-                    <p className="font-semibold text-gray-900">Линк към mobile.bg</p>
+                    <p className="font-semibold text-gray-900">
+                      Линк към mobile.bg
+                    </p>
                     <a
                       href="https://himera.mobile.bg"
                       target="_blank"
@@ -221,24 +259,49 @@ export default function ContactPage() {
 
             {/* Form */}
             <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-              <h2 className="text-xl font-semibold text-gray-900">Форма за контакт</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Форма за контакт
+              </h2>
               <p className="mt-2 text-sm text-gray-600">
                 Изпратете запитване и ще се свържем с вас възможно най-бързо.
               </p>
 
               {status === "sent" && (
                 <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-                  <span className="font-semibold">Благодарим!</span> Съобщението е изпратено
-                  (демо). Ще свържем формата към имейл в следващ етап.
+                  <span className="font-semibold">Благодарим!</span> Съобщението е
+                  изпратено.
+                </div>
+              )}
+
+              {status === "error" && (
+                <div className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">
+                  <span className="font-semibold">Упс!</span> {errorMsg}
                 </div>
               )}
 
               <form onSubmit={onSubmit} className="mt-6 space-y-4">
+                {/* Honeypot anti-spam */}
+                <input
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden"
+                />
+
+                {/* Optional email subject */}
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="Ново запитване от сайта"
+                />
+
                 <div>
                   <label className="text-sm font-medium text-gray-900">Име</label>
                   <input
+                    name="name"
                     required
-                    disabled={status === "sent"}
+                    disabled={status === "sending"}
                     className="mt-2 h-11 w-full rounded-md border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200 disabled:cursor-not-allowed disabled:bg-gray-50"
                     placeholder="Вашето име"
                   />
@@ -249,18 +312,22 @@ export default function ContactPage() {
                     Телефон / Имейл
                   </label>
                   <input
+                    name="contact"
                     required
-                    disabled={status === "sent"}
+                    disabled={status === "sending"}
                     className="mt-2 h-11 w-full rounded-md border border-gray-200 bg-white px-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200 disabled:cursor-not-allowed disabled:bg-gray-50"
                     placeholder="0890... или email"
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-900">Съобщение</label>
+                  <label className="text-sm font-medium text-gray-900">
+                    Съобщение
+                  </label>
                   <textarea
+                    name="message"
                     required
-                    disabled={status === "sent"}
+                    disabled={status === "sending"}
                     className="mt-2 min-h-[140px] w-full rounded-md border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200 disabled:cursor-not-allowed disabled:bg-gray-50"
                     placeholder="Напишете вашето запитване..."
                   />
@@ -268,10 +335,10 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
-                  disabled={status === "sent"}
+                  disabled={status === "sending"}
                   className="h-11 w-full rounded-md bg-gray-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 disabled:cursor-not-allowed disabled:bg-gray-300"
                 >
-                  {status === "sent" ? "Изпратено" : "Изпрати"}
+                  {status === "sending" ? "Изпращане..." : "Изпрати"}
                 </button>
 
                 <p className="text-xs text-gray-500">
@@ -308,11 +375,12 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Spacer card on the right to keep rhythm on large screens (optional) */}
+            {/* Spacer card on the right */}
             <div className="hidden lg:block rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
               <h2 className="text-xl font-semibold text-gray-900">Бързи връзки</h2>
               <p className="mt-2 text-sm text-gray-600">
-                Ако предпочитате, разгледайте наличните автомобили или пишете директно.
+                Ако предпочитате, разгледайте наличните автомобили или пишете
+                директно.
               </p>
               <div className="mt-5 flex flex-col gap-3">
                 <a
@@ -332,7 +400,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Map: span BOTH columns so there is no “empty” feeling */}
+            {/* Map */}
             <div className="lg:col-span-2 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
               <div className="px-8 pt-8">
                 <h2 className="text-xl font-semibold text-gray-900">Локация</h2>
