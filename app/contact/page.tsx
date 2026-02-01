@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 function Icon({ name }: { name: "pin" | "phone" | "mail" | "clock" | "link" }) {
   const common = "h-4 w-4";
@@ -86,6 +86,54 @@ function Icon({ name }: { name: "pin" | "phone" | "mail" | "clock" | "link" }) {
   }
 }
 
+function sofiaNow() {
+  // DST-safe Sofia time
+  return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Sofia" }));
+}
+
+function pad2(n: number) {
+  return String(n).padStart(2, "0");
+}
+
+function minutesOfDay(d: Date) {
+  return d.getHours() * 60 + d.getMinutes();
+}
+
+function getTodayStatusBG() {
+  const now = sofiaNow();
+  const day = now.getDay(); // 0 Sun ... 6 Sat
+
+  // Default schedule:
+  // Mon–Fri 09:00–18:00
+  // Sat/Sun: only by arrangement => treat as "Closed" for the widget
+  const isWeekend = day === 0 || day === 6;
+
+  if (isWeekend) {
+    return {
+      label: "Днес:",
+      hours: "Затворено",
+      note: "Работим и в събота/неделя само с предварителна уговорка.",
+      // optional: show Sofia current time (nice touch)
+      nowText: `${pad2(now.getHours())}:${pad2(now.getMinutes())} (София)`,
+    };
+  }
+
+  const openMins = 9 * 60;
+  const closeMins = 18 * 60;
+  const nowMins = minutesOfDay(now);
+
+  const isOpen = nowMins >= openMins && nowMins < closeMins;
+
+  return {
+    label: "Днес:",
+    hours: "09:00 – 18:00ч.",
+    note: isOpen
+      ? "В момента сме отворени. Работим и в събота/неделя само с предварителна уговорка."
+      : "В момента сме затворени. Работим и в събота/неделя само с предварителна уговорка.",
+    nowText: `${pad2(now.getHours())}:${pad2(now.getMinutes())} (София)`,
+  };
+}
+
 export default function ContactPage() {
   const FORM_ENDPOINT = "https://formspree.io/f/mojwzlrl";
 
@@ -93,6 +141,9 @@ export default function ContactPage() {
     "idle"
   );
   const [errorMsg, setErrorMsg] = useState("");
+
+  // ✅ compute once per render (you can upgrade to ticking clock if you want)
+  const today = useMemo(() => getTodayStatusBG(), []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -162,19 +213,24 @@ export default function ContactPage() {
               </div>
             </div>
 
+            {/* ✅ FIXED: weekend shows "Затворено" */}
             <div className="rounded-xl border border-gray-300 bg-gray-50 px-5 py-4 text-sm text-gray-700 shadow-sm">
               <div className="flex items-center gap-2">
                 <span className="text-gray-900">
                   <Icon name="clock" />
                 </span>
                 <span>
-                  <span className="font-semibold text-gray-900">Днес:</span>{" "}
-                  09:00 – 18:00ч.
+                  <span className="font-semibold text-gray-900">
+                    {today.label}
+                  </span>{" "}
+                  {today.hours}
                 </span>
               </div>
-              <div className="mt-2 text-xs text-gray-600">
-                Работим и в събота/неделя само с предварителна уговорка.
-              </div>
+
+              <div className="mt-2 text-xs text-gray-600">{today.note}</div>
+
+              {/* optional small line, helps debugging / trust */}
+              <div className="mt-2 text-[11px] text-gray-500">{today.nowText}</div>
             </div>
           </div>
         </div>
@@ -265,8 +321,8 @@ export default function ContactPage() {
 
               {status === "sent" && (
                 <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-                  <span className="font-semibold">Благодарим!</span> Съобщението е
-                  изпратено.
+                  <span className="font-semibold">Благодарим!</span> Съобщението
+                  е изпратено.
                 </div>
               )}
 

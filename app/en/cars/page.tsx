@@ -1,16 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { SheetCar } from "../../../lib/carsFromSheet";
 
 const MOBILE_BG = "https://himera.mobile.bg";
 
-// These stay BG because your sheet values are BG and your extractors are BG-based
-const FUEL_OPTIONS = ["Бензин", "Дизел", "Хибрид", "Електрически"] as const;
-const TRANS_OPTIONS = ["Автоматик", "Ръчни"] as const;
+// UI options in EN
+const FUEL_OPTIONS = ["Petrol", "Diesel", "Hybrid", "Electric"] as const;
+const TRANS_OPTIONS = ["Automatic", "Manual"] as const;
 
 function statusLabel(status?: SheetCar["status"]) {
   switch (status) {
@@ -42,19 +41,20 @@ function statusClass(status?: SheetCar["status"]) {
   }
 }
 
+// Extractors still read BG subtitle, but RETURN EN values to match the select options
 function extractFuelFromSubtitle(subtitle?: string) {
   const s = (subtitle ?? "").toLowerCase();
-  if (s.includes("диз")) return "Дизел";
-  if (s.includes("бенз")) return "Бензин";
-  if (s.includes("хиб")) return "Хибрид";
-  if (s.includes("елект")) return "Електрически";
+  if (s.includes("диз")) return "Diesel";
+  if (s.includes("бенз")) return "Petrol";
+  if (s.includes("хиб")) return "Hybrid";
+  if (s.includes("елект")) return "Electric";
   return "";
 }
 
 function extractTransFromSubtitle(subtitle?: string) {
   const s = (subtitle ?? "").toLowerCase();
-  if (s.includes("авто")) return "Автоматик";
-  if (s.includes("ръч")) return "Ръчни";
+  if (s.includes("авто")) return "Automatic";
+  if (s.includes("ръч")) return "Manual";
   return "";
 }
 
@@ -109,7 +109,6 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
           sizes="(max-width: 1024px) 100vw, 33vw"
         />
 
-        {/* Status badge */}
         {badge && (
           <div className="absolute left-4 top-4">
             <span
@@ -122,7 +121,6 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
           </div>
         )}
 
-        {/* Arrows */}
         {canNav && (
           <>
             <button
@@ -161,7 +159,6 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
           </>
         )}
 
-        {/* Dots */}
         {canNav && (
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
             <div className="flex gap-1.5 rounded-full bg-black/35 px-3 py-1.5 backdrop-blur">
@@ -209,7 +206,6 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
   );
 }
 
-
 export default function CarsPage() {
   const pathname = usePathname();
   const isEN = pathname === "/en" || pathname.startsWith("/en/");
@@ -218,7 +214,7 @@ export default function CarsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [query, setQuery] = useState("");
+  // removed query state
   const [fuel, setFuel] = useState("all");
   const [trans, setTrans] = useState("all");
 
@@ -237,24 +233,15 @@ export default function CarsPage() {
   }, []);
 
   const filtered = useMemo(() => {
-    const q = query.toLowerCase();
-
     return cars.filter((c) => {
-      // filters stay based on BG subtitle values (your extractor is BG-based)
-      const fuelOk = fuel === "all" || extractFuelFromSubtitle(c.subtitle) === fuel;
+      const fuelOk =
+        fuel === "all" || extractFuelFromSubtitle(c.subtitle) === fuel;
       const transOk =
         trans === "all" || extractTransFromSubtitle(c.subtitle) === trans;
 
-      // search across both subtitles
-      const textOk =
-        !q ||
-        c.title.toLowerCase().includes(q) ||
-        (c.subtitle ?? "").toLowerCase().includes(q) ||
-        (c.engSubtitle ?? "").toLowerCase().includes(q);
-
-      return fuelOk && transOk && textOk;
+      return fuelOk && transOk;
     });
-  }, [cars, query, fuel, trans]);
+  }, [cars, fuel, trans]);
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -269,24 +256,18 @@ export default function CarsPage() {
               : "Разгледайте актуалните предложения или посетете mobile.bg."}
           </p>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={isEN ? "Search..." : "Търсене..."}
-              className="h-11 rounded-md border border-gray-300 bg-white px-4 text-sm focus:ring-2 focus:ring-gray-200"
-            />
-
+          {/* Only filters + mobile.bg button */}
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <select
               value={fuel}
               onChange={(e) => setFuel(e.target.value)}
               className="h-11 rounded-md border border-gray-300 bg-white px-4 text-sm"
             >
-              <option value="all">
-                {isEN ? "Fuel (all)" : "Гориво (всички)"}
-              </option>
+              <option value="all">Fuel (all)</option>
               {FUEL_OPTIONS.map((f) => (
-                <option key={f}>{f}</option>
+                <option key={f} value={f}>
+                  {f}
+                </option>
               ))}
             </select>
 
@@ -295,11 +276,11 @@ export default function CarsPage() {
               onChange={(e) => setTrans(e.target.value)}
               className="h-11 rounded-md border border-gray-300 bg-white px-4 text-sm"
             >
-              <option value="all">
-                {isEN ? "Transmission (all)" : "Скоростна кутия"}
-              </option>
+              <option value="all">Transmission (all)</option>
               {TRANS_OPTIONS.map((t) => (
-                <option key={t}>{t}</option>
+                <option key={t} value={t}>
+                  {t}
+                </option>
               ))}
             </select>
 

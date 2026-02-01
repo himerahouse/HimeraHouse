@@ -94,6 +94,35 @@ export default function ContactPage() {
   );
   const [errorMsg, setErrorMsg] = useState("");
 
+  // ✅ Sofia hours widget (weekend => closed, weekday => 09:00–18:00)
+  function getSofiaHoursLabel() {
+    const now = new Date();
+
+    // Sofia time (DST-safe)
+    const sofiaNow = new Date(
+      now.toLocaleString("en-US", { timeZone: "Europe/Sofia" })
+    );
+
+    const day = sofiaNow.getDay(); // 0 Sun ... 6 Sat
+    const isWeekend = day === 0 || day === 6;
+
+    if (isWeekend) {
+      return {
+        title: "Today:",
+        hours: "Closed",
+        note: "We may be open on Saturday/Sunday only by prior arrangement.",
+      };
+    }
+
+    return {
+      title: "Today:",
+      hours: "09:00 – 18:00",
+      note: "We are also open on Saturday/Sunday only by prior arrangement.",
+    };
+  }
+
+  const hours = getSofiaHoursLabel();
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
@@ -162,19 +191,20 @@ export default function ContactPage() {
               </div>
             </div>
 
+            {/* ✅ FIXED: dynamic hours */}
             <div className="rounded-xl border border-gray-300 bg-gray-50 px-5 py-4 text-sm text-gray-700 shadow-sm">
               <div className="flex items-center gap-2">
                 <span className="text-gray-900">
                   <Icon name="clock" />
                 </span>
                 <span>
-                  <span className="font-semibold text-gray-900">Today:</span>{" "}
-                  09:00 – 18:00
+                  <span className="font-semibold text-gray-900">
+                    {hours.title}
+                  </span>{" "}
+                  {hours.hours}
                 </span>
               </div>
-              <div className="mt-2 text-xs text-gray-600">
-                We are also open on Saturday/Sunday only by prior arrangement.
-              </div>
+              <div className="mt-2 text-xs text-gray-600">{hours.note}</div>
             </div>
           </div>
         </div>
