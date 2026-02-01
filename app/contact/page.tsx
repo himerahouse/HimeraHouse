@@ -113,8 +113,7 @@ function getTodayStatusBG() {
       label: "Днес:",
       hours: "Затворено",
       note: "Работим и в събота/неделя само с предварителна уговорка.",
-      // optional: show Sofia current time (nice touch)
-      nowText: `${pad2(now.getHours())}:${pad2(now.getMinutes())} (София)`,
+      
     };
   }
 
