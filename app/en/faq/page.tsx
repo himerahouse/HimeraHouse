@@ -5,77 +5,77 @@ import Link from "next/link";
 
 const faqs = [
   {
-    q: "Какви автомобили предлагате?",
-    a: "Предлагаме както нови, така и употребявани автомобили, които са преминали техническа проверка.",
-    tag: "Автомобили",
+    q: "What cars do you offer?",
+    a: "We offer both new and used cars that have been technically inspected.",
+    tag: "Cars",
   },
   {
-    q: "Мога ли да поръчам конкретен модел?",
-    a: "Да, можем да ви съдействаме за внос на автомобил по ваш избор.",
-    tag: "Внос",
+    q: "Can I order a specific model?",
+    a: "Yes, we can help you with the import of a car of your choice.",
+    tag: "Import",
   },
   {
-    q: "Помагате ли с финансиране?",
-    a: "Разбира се! Работим с различни финансови институции, за да ви предложим удобен лизинг или кредит. Също така предлагаме и собствен лизинг без одобрение!",
-    tag: "Финансиране",
+    q: "Do you provide financial assistance?",
+    a: "Of course! We work with various financial institutions so as to offer you a suitable leasing or credit. We also have our own leasing which does not require any approval!",
+    tag: "Financing",
   },
   {
-    q: "Как мога да проверя историята на автомобила?",
-    a: "Ние предоставяме подробна информация за историята на всеки автомобил, включително сервизна документация, километрите и евентуални щети от предишни собственици. Предоставяме и VIN номер за проверка.",
-    tag: "Проверка",
+    q: "How can I check the car’s background?",
+    a: "We provide detailed information about the car’s history, including service records, mileage, and eventual damages caused by previous owners. The VIN number is also provided for verification purposes.",
+    tag: "Verification",
   },
   {
-    q: "Предлагате ли тест драйв?",
-    a: "Да, предлагаме тест драйв за всички автомобили на склад. Свържете се с нас, за да насрочите удобен за вас ден и час.",
-    tag: "Покупка",
+    q: "Do you offer test drive?",
+    a: "Yes, we offer test drive for all cars available in our garage. Get in touch with us to schedule a day and time suitable for you.",
+    tag: "Purchase",
   },
   {
-    q: "Колко време отнема доставката на автомобил при внос?",
-    a: "Обикновено доставката отнема между 4 до 7 дни, в зависимост от местоположението на автомобила.",
-    tag: "Внос",
+    q: "How long does it take for a car to be imported?",
+    a: "Depending on the vehicle’s location, the delivery normally takes between 4 and 7 days.",
+    tag: "Import",
   },
   {
-    q: "Как се извършва плащането?",
-    a: "Приемаме плащания по банков път, както и чрез лизинг или кредит. Предлагаме прозрачни условия и ще ви помогнем да изберете най-удобния вариант.",
-    tag: "Плащане",
+    q: "How is payment made?",
+    a: "We accept payments by bank transfer and through leasing or credit. We offer transparent terms and conditions and will help you choose the most convenient option.",
+    tag: "Payment",
   },
   {
-    q: "Как мога да бъда сигурен в техническото състояние на автомобила?",
-    a: "Всеки автомобил преминава през детайлна проверка в сертифициран сервиз. Можем да предоставим и независима инспекция по ваше желание във ваш сервиз.",
-    tag: "Проверка",
+    q: "How can I be sure of the car’s technical condition?",
+    a: "Each vehicle is subjected to a detailed inspection carried out in a certified service station. We may also provide an independent inspection in a service station of your choice.",
+    tag: "Verification",
   },
   {
-    q: "Има ли скрити такси при покупка?",
-    a: "Не, при нас всички такси са прозрачни. Ще получите пълен списък на разходите преди финализиране на сделката.",
-    tag: "Покупка",
+    q: "Are there any hidden fees related to the purchase?",
+    a: "No, all our fees are transparent. You will receive a full list of costs before the transaction is finalized.",
+    tag: "Purchase",
   },
   {
-    q: "Предлагате ли съдействие при регистрация на автомобил?",
-    a: "Да, можем да ви съдействаме с всички необходими документи и процедури за регистрация в КАТ.",
-    tag: "Регистрация",
+    q: "Do you offer support during the car’s registration?",
+    a: "Yes, we may assist you with all necessary documents and Traffic Police registration procedures.",
+    tag: "Registration",
   },
   {
-    q: "Работите ли с клиенти извън България?",
-    a: "Да, предлагаме услуги за клиенти както в страната, така и в чужбина, включително доставка на автомобили.",
-    tag: "Доставка",
+    q: "Do you work with customers outside Bulgaria?",
+    a: "Yes, our services, including car deliveries, are offered to customers located both in the country and abroad.",
+    tag: "Delivery",
   },
   {
-    q: "Мога ли да резервирам автомобил?",
-    a: "Да, можете да резервирате избрания автомобил срещу минимален депозит, докато уредите останалите подробности по покупката.",
-    tag: "Покупка",
+    q: "Can I reserve a car?",
+    a: "Yes, while arranging the remaining purchase details, you may reserve the car selected by you against the payment of a minimum deposit.",
+    tag: "Purchase",
   },
 ];
 
 const tags = [
-  "Всички",
-  "Автомобили",
-  "Внос",
-  "Финансиране",
-  "Проверка",
-  "Покупка",
-  "Плащане",
-  "Регистрация",
-  "Доставка",
+  "All",
+  "Cars",
+  "Import",
+  "Financing",
+  "Verification",
+  "Purchase",
+  "Payment",
+  "Registration",
+  "Delivery",
 ] as const;
 
 function Chevron({ open }: { open: boolean }) {
@@ -120,12 +120,12 @@ function SearchIcon() {
 export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [query, setQuery] = useState("");
-  const [activeTag, setActiveTag] = useState<(typeof tags)[number]>("Всички");
+  const [activeTag, setActiveTag] = useState<(typeof tags)[number]>("All");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return faqs
-      .filter((f) => (activeTag === "Всички" ? true : f.tag === activeTag))
+      .filter((f) => (activeTag === "All" ? true : f.tag === activeTag))
       .filter((f) => {
         if (!q) return true;
         return f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q);
@@ -140,11 +140,12 @@ export default function FAQPage() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
-                Често задавани въпроси
+                Frequently Asked Questions
               </h1>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-700">
-                Тук ще намерите отговори на най-честите въпроси относно
-                автомобили, внос, финансиране и процеса по покупка.
+                Here you will find answers to the most frequently asked
+                questions regarding cars, import, financing, and the purchasing
+                process.
               </p>
 
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -152,22 +153,22 @@ export default function FAQPage() {
                   href="/contact"
                   className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
-                  Свържете се с нас
+                  Contact us
                 </Link>
                 <Link
                   href="/cars"
                   className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
                 >
-                  Разгледай автомобили
+                  Browse cars
                 </Link>
               </div>
             </div>
 
             {/* Quick pill */}
             <div className="rounded-xl border border-gray-300 bg-gray-50 px-5 py-4 text-sm text-gray-700 shadow-sm">
-              <div className="text-xs text-gray-500">Бърз филтър</div>
+              <div className="text-xs text-gray-500">Quick filter</div>
               <div className="mt-1 font-medium text-gray-900">
-                Търсене + категории
+                Search + categories
               </div>
             </div>
           </div>
@@ -184,7 +185,7 @@ export default function FAQPage() {
                   setQuery(e.target.value);
                   setOpenIndex(null);
                 }}
-                placeholder="Търсене по ключова дума (напр. лизинг, внос, VIN)..."
+                placeholder='Search by keyword (e.g. leasing, import, VIN)...'
                 className="h-11 w-full rounded-md border border-gray-300 bg-white pl-11 pr-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200"
               />
             </div>
@@ -220,7 +221,7 @@ export default function FAQPage() {
         <div className="mx-auto max-w-7xl px-6 py-12">
           <div className="mx-auto max-w-3xl">
             <div className="mb-4 text-sm text-gray-700">
-              Показани въпроси:{" "}
+              Questions shown:{" "}
               <span className="font-semibold text-gray-900">
                 {filtered.length}
               </span>
@@ -233,11 +234,7 @@ export default function FAQPage() {
                 return (
                   <div
                     key={item.q}
-                    className={`overflow-hidden rounded-xl border shadow-sm transition ${
-                      isOpen
-                        ? "border-gray-300 bg-gray-50"
-                        : "border-gray-300 bg-gray-50"
-                    }`}
+                    className="overflow-hidden rounded-xl border border-gray-300 bg-gray-50 shadow-sm transition"
                   >
                     <button
                       type="button"
@@ -278,7 +275,7 @@ export default function FAQPage() {
                     {isOpen && (
                       <div className="border-t border-gray-300 px-6 pb-5 pt-4">
                         <div className="border-l-2 border-gray-900/60 pl-4">
-                          <p className="text-sm leading-relaxed text-gray-800 font-medium">
+                          <p className="text-sm font-medium leading-relaxed text-gray-800">
                             {item.a}
                           </p>
                         </div>
@@ -288,22 +285,24 @@ export default function FAQPage() {
                             href="/contact"
                             className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-black"
                           >
-                            Попитай ни
+                            Ask us
                           </Link>
-                          {item.tag === "Финансиране" ? (
+
+                          {item.tag === "Financing" ? (
                             <Link
                               href="/leasing"
                               className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50"
                             >
-                              Лизинг условия
+                              Leasing terms
                             </Link>
                           ) : null}
-                          {item.tag === "Внос" ? (
+
+                          {item.tag === "Import" ? (
                             <Link
                               href="/services"
                               className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50"
                             >
-                              Услуги за внос
+                              Import services
                             </Link>
                           ) : null}
                         </div>
@@ -315,8 +314,8 @@ export default function FAQPage() {
 
               {filtered.length === 0 && (
                 <div className="rounded-xl border border-gray-300 bg-gray-50 p-8 text-sm text-gray-700">
-                  Няма намерени резултати. Опитайте с друга ключова дума или
-                  сменете категорията.
+                  No results found. Try a different keyword or switch the
+                  category.
                 </div>
               )}
             </div>
@@ -324,30 +323,30 @@ export default function FAQPage() {
             {/* Bottom CTA */}
             <div className="mt-10 rounded-2xl border border-gray-200 bg-gray-900 p-8 shadow-sm">
               <h2 className="text-xl font-semibold text-white">
-                Не намерихте отговор?
+                Didn’t find an answer?
               </h2>
               <p className="mt-2 text-sm text-white/80">
-                Изпратете ни въпрос и ще ви отговорим възможно най-бързо.
+                Send us your question and we will reply as soon as possible.
               </p>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/contact"
                   className="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-100"
                 >
-                  Контакти
+                  Contact
                 </Link>
                 <Link
                   href="/cars"
                   className="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-sm font-medium text-white hover:bg-white/10"
                 >
-                  Налични автомобили
+                  Available cars
                 </Link>
               </div>
             </div>
 
             <p className="mt-6 text-center text-xs text-gray-600">
-              Ако искате най-бърз отговор, оставете телефон/имейл в страницата
-              „Контакти“.
+              For the fastest response, leave your phone/email on the “Contact”
+              page.
             </p>
           </div>
         </div>

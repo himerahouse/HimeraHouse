@@ -4,37 +4,36 @@ import Link from "next/link";
 
 const leasingTypes = [
   {
-    title: "Стандартен финансов лизинг",
-    subtitle: "До 60 месеца • първоначална вноска по желание",
+    title: "Standard financial leasing",
+    subtitle: "Up to 60 months • down payment set by the customer",
     bullets: [
-      "Срок до 60 месеца.",
-      "Първоначална вноска според желанието на клиента.",
-      "Подходящ и за друга техника, не само автомобили.",
-      "Ясен, предвидим погасителен план.",
+      "Standard car leasing for a period of up to 60 months.",
+      "Initial payment determined by the customer.",
+      "In addition to cars, this type of leasing is also suitable for other types of equipment.",
     ],
-    badge: "Най-популярен",
+    badge: "Most popular",
   },
   {
-    title: "Оперативен лизинг",
-    subtitle: "До 60 месеца • с възможност за данъчен кредит (ДДС)",
+    title: "Operational leasing",
+    subtitle: "Up to 60 months • VAT tax credit option",
     bullets: [
-      "Срок до 60 месеца.",
-      "Първоначална вноска според желанието на клиента.",
-      "Възможност за ползване на данъчен кредит (ДДС).",
-      "Подходящ за леки автомобили и товарни автомобили с N1 сертификат.",
+      "A special form of leasing with a period of up to 60 months.",
+      "Initial payment determined by the customer.",
+      "Allows the customer to use a tax credit (VAT).",
+      "Applicable for passenger cars or a truck with an N1 certificate.",
     ],
-    badge: "За фирми",
+    badge: "For businesses",
   },
   {
-    title: "Индивидуален план",
-    subtitle: "Без първоначална вноска • без одобрение",
+    title: "INDIVIDUAL PLAN",
+    subtitle: "No down payment • no approval",
     bullets: [
-      "Изготвяме план според вашите възможности и предпочитания.",
-      "Възможност за лизинг БЕЗ първоначална вноска.",
-      "Възможност БЕЗ одобрение.",
-      "Бързо и лесно – обсъждаме опциите заедно.",
+      "We shall draft an individual leasing plan tailored to the customer.",
+      "Option for leasing WITHOUT an initial payment, if the customer desires so.",
+      "Option WITHOUT an approval.",
+      "We discuss the details together to match the most suitable plan.",
     ],
-    badge: "Гъвкав",
+    badge: "Flexible",
   },
 ];
 
@@ -47,18 +46,19 @@ export default function LeasingPage() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
-                Лизинг
+                Leasing
               </h1>
+
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-700">
                 <span className="font-semibold text-gray-900">
-                  Специални условия за лизинг и индивидуален погасителен план
+                  SPECIAL LEASING CONDITIONS AND INDIVIDUAL REPAYMENT PLAN
                 </span>
-                , както и{" "}
+                , as well as{" "}
                 <span className="font-semibold text-gray-900">
-                  собствен лизинг без доказване на доходи
-                </span>{" "}
-                с преференциални условия. С радост ще ви помогнем да намерим
-                подходящия за вас автомобил и да го лизинговаме.
+                  OUR OWN LEASING AT PREFERENTIAL TERMS, WITH NO PROOF OF INCOME
+                </span>
+                . We’ll be glad to assist you in finding and leasing the right
+                car for you.
               </p>
 
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -66,13 +66,13 @@ export default function LeasingPage() {
                   href="/contact"
                   className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
-                  Запитване за лизинг
+                  Leasing inquiry
                 </Link>
                 <Link
                   href="/cars"
                   className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
                 >
-                  Разгледай автомобили
+                  Browse cars
                 </Link>
               </div>
             </div>
@@ -81,20 +81,20 @@ export default function LeasingPage() {
             <div className="rounded-xl border border-gray-300 bg-gray-50 px-5 py-4 text-sm text-gray-700 shadow-sm">
               <div className="space-y-2">
                 <p>
-                  <span className="font-semibold text-gray-900">Срок:</span> до 60
-                  месеца
+                  <span className="font-semibold text-gray-900">Term:</span> up
+                  to 60 months
                 </p>
                 <p>
                   <span className="font-semibold text-gray-900">
-                    Първоначална вноска:
+                    Down payment:
                   </span>{" "}
-                  по желание
+                  set by the customer
                 </p>
                 <p>
                   <span className="font-semibold text-gray-900">
-                    Вариант без доходи:
+                    No proof of income:
                   </span>{" "}
-                  наличен
+                  available
                 </p>
               </div>
             </div>
@@ -110,7 +110,7 @@ export default function LeasingPage() {
             {leasingTypes.map((t) => (
               <div
                 key={t.title}
-                className="rounded-2xl border border-gray-300 bg-gray-50 p-8 shadow-sm"
+                className="rounded-2xl border border-gray-300 bg-gray-50 p-8 shadow-sm flex h-full flex-col"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
@@ -134,12 +134,13 @@ export default function LeasingPage() {
                   ))}
                 </ul>
 
-                <div className="mt-8">
+                {/* Push button to the bottom so all cards look even */}
+                <div className="mt-auto pt-8">
                   <Link
                     href="/contact"
                     className="inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-4 py-3 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-300"
                   >
-                    Попитай за оферта
+                    Request an offer
                   </Link>
                 </div>
               </div>
@@ -151,11 +152,11 @@ export default function LeasingPage() {
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-white">
-                  Искате индивидуална оферта?
+                  Want an individual offer?
                 </h2>
                 <p className="mt-2 text-sm text-white/80">
-                  Изпратете запитване и ще ви предложим най-подходящия вариант
-                  според желания срок и бюджет.
+                  Send an inquiry and we will propose the most suitable option
+                  based on your desired term and budget.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
@@ -163,13 +164,13 @@ export default function LeasingPage() {
                   href="/contact"
                   className="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-100"
                 >
-                  Свържи се с нас
+                  Contact us
                 </Link>
                 <Link
                   href="/cars"
                   className="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-sm font-medium text-white hover:bg-white/10"
                 >
-                  Виж автомобили
+                  View cars
                 </Link>
               </div>
             </div>
@@ -177,8 +178,8 @@ export default function LeasingPage() {
 
           {/* Note */}
           <p className="mt-6 text-xs text-gray-600">
-            * Условията са примерни и зависят от автомобила, срока и избраната
-            първоначална вноска. Свържете се с нас за конкретна оферта.
+            * Terms are indicative and depend on the vehicle, the term, and the
+            selected down payment. Contact us for a specific offer.
           </p>
         </div>
       </section>

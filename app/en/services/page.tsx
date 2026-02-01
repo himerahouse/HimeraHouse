@@ -2,61 +2,66 @@ import Link from "next/link";
 
 const services = [
   {
-    title: "Внос на автомобили и техника по заявка",
-    subtitle: "Намираме подходящия автомобил според вашите изисквания и бюджет",
+    title: "Import of cars and equipment on request",
+    subtitle:
+      "We’ll be happy to assist you in finding the right car for you, which will match your expectations and budget.",
     bullets: [
-      "Съдействие при избор на автомобил според желанията и бюджета ви.",
-      "Проверка на историята и наличната информация за автомобила.",
-      "Организиране на лицензиран и бърз транспорт до адреса ви в срок до 5 календарни дни.",
-      "Доставка на машини и техника по задание с минимален депозит.",
+      "We’ll be happy to assist you in finding the right car for you, which will match your expectations and budget.",
+      "We’ll check the vehicle’s background.",
+      "Within 5 calendar days, we’ll arrange licensed and fast transport to your address.",
+      "At your request we can deliver any kind of machines and equipment against the payment of a minimum deposit!",
     ],
   },
   {
-    title: "Регистрация в КАТ",
-    subtitle: "Пълно съдействие без опашки и загуба на време",
+    title: "Registration in Traffic Police",
+    subtitle:
+      "We shall prepare all necessary documents, and a representative of ours shall register the motor vehicle without you waiting in line and wasting your time.",
     bullets: [
-      "Подготовка и организация на всички необходими документи.",
-      "Регистрация на автомобила от наш представител.",
-      "Спестяване на време и административни ангажименти.",
+      "We shall prepare all necessary documents.",
+      "A representative of ours shall register the motor vehicle without you waiting in line and wasting your time.",
     ],
   },
   {
-    title: "Застраховки",
-    subtitle: "Преференциални условия чрез наш застрахователен брокер",
+    title: "Insurance policies",
+    subtitle:
+      "We offer Civil Liability and Auto Casco insurance policies concluded at preferential prices through our broker.",
     bullets: [
-      "Гражданска отговорност.",
-      "Авто КАСКО.",
-      "Съдействие при избор на най-подходящата застраховка.",
+      "Civil Liability insurance.",
+      "Auto Casco insurance.",
+      "Preferential prices through our broker.",
     ],
   },
   {
-    title: "Транспорт",
-    subtitle: "Бърз и лицензиран транспорт в България и Европа",
+    title: "Transport",
+    subtitle:
+      "Delivery to any location on the territory of Bulgaria and Europe by fast and licensed means of transport.",
     bullets: [
-      "Транспорт до всяка точка на България.",
-      "Международен транспорт в рамките на Европа.",
-      "Лицензиран и организиран превоз.",
+      "Delivery to any location on the territory of Bulgaria.",
+      "International delivery within Europe.",
+      "Fast and licensed means of transport.",
     ],
   },
   {
-    title: "Лизинг",
-    subtitle: "Индивидуален план според вашия месечен бюджет",
+    title: "Leasing",
+    subtitle:
+      "Individual leasing in accordance with your monthly budget and requirements for initial payment.",
     bullets: [
-      "Изготвяне на лизингово решение според бюджета ви.",
-      "Условия съобразени с желаната първоначална вноска.",
-      "Подходящо за леки и товарни автомобили.",
+      "Individual leasing in accordance with your monthly budget.",
+      "Terms in line with your requirements for initial payment.",
+      "Suitable for passenger cars and commercial vehicles.",
     ],
-    cta: { href: "/leasing", label: "Виж повече за лизинг" },
-    badge: "Преференциални условия",
+    cta: { href: "/leasing", label: "Learn more about leasing" },
+    badge: "Preferential terms",
   },
   {
-    title: "Продажба на автомобил на консигнация",
-    subtitle: "Продажба от ваше име чрез нашия шоурум",
+    title: "Selling your car on consignment",
+    subtitle:
+      "We may agree to sell your car in our showroom and will try to achieve the best price in the shortest possible time.",
     bullets: [
-      "Приемане на автомобила за продажба в нашия шоурум.",
-      "Стремеж към най-изгодна продажна цена в кратки срокове.",
-      "Спазване на вашите изисквания относно начина на продажба.",
-      "Оценка и цена на пазарен принцип с цел успешна реализация.",
+      "We may agree to sell your car in our showroom.",
+      "We will try to achieve the best price in the shortest possible time.",
+      "If you leave your car for sale, we shall comply with the way you want it to be sold.",
+      "We assess its value and come up with a market price that shall guarantee the successful sale of the vehicle.",
     ],
   },
 ];
@@ -141,11 +146,7 @@ function Icon({
             stroke="currentColor"
             strokeWidth="1.8"
           />
-          <path
-            d="M8 11h8M8 15h6"
-            stroke="currentColor"
-            strokeWidth="1.8"
-          />
+          <path d="M8 11h8M8 15h6" stroke="currentColor" strokeWidth="1.8" />
         </svg>
       );
     case "consign":
@@ -163,12 +164,12 @@ function Icon({
 }
 
 const iconByTitle: Record<string, Parameters<typeof Icon>[0]["name"]> = {
-  "Внос на автомобили и техника по заявка": "import",
-  "Регистрация в КАТ": "kat",
-  "Застраховки": "insurance",
-  "Транспорт": "transport",
-  "Лизинг": "leasing",
-  "Продажба на автомобил на консигнация": "consign",
+  "Import of cars and equipment on request": "import",
+  "Registration in Traffic Police": "kat",
+  "Insurance policies": "insurance",
+  Transport: "transport",
+  Leasing: "leasing",
+  "Selling your car on consignment": "consign",
 };
 
 export default function ServicesPage() {
@@ -177,11 +178,11 @@ export default function ServicesPage() {
       <section className="border-b border-gray-300 bg-gray-100">
         <div className="mx-auto max-w-7xl px-6 py-10">
           <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
-            Услуги
+            Services
           </h1>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-700">
-            Предлагаме цялостно съдействие при внос, покупка, регистрация,
-            застраховане, транспорт и финансиране на автомобили и техника.
+            We offer full assistance with import, purchase, registration,
+            insurance, transport, and financing of cars and equipment.
           </p>
         </div>
       </section>

@@ -5,11 +5,11 @@ export type SheetCar = {
   id: string;
   title: string;
   subtitle: string;
+  engSubtitle?: string; // ✅ NEW
   price: string;
   images: string[];
   mobileUrl: string;
 
-  // optional for later (if you add these columns)
   status?: "available" | "reserved" | "sold" | "germany";
   fuel?: string;
   transmission?: string;
@@ -25,7 +25,7 @@ function num(val: string) {
 export async function fetchCarsFromSheet(): Promise<SheetCar[]> {
   const url =
     process.env.CARS_SHEET_CSV_URL ||
-    process.env.NEXT_PUBLIC_CARS_SHEET_CSV_URL; // fallback to what you already set
+    process.env.NEXT_PUBLIC_CARS_SHEET_CSV_URL;
 
   if (!url) return [];
 
@@ -64,10 +64,14 @@ export async function fetchCarsFromSheet(): Promise<SheetCar[]> {
         ? (statusRaw as SheetCar["status"])
         : undefined;
 
+    const subtitle = get(r, "subtitle");
+    const engSubtitle = get(r, "engSubtitle"); // ✅ NEW (must match sheet header exactly)
+
     cars.push({
       id,
       title,
-      subtitle: get(r, "subtitle"),
+      subtitle,
+      engSubtitle: engSubtitle || undefined, // ✅ NEW
       price: get(r, "price") || "По запитване",
       images,
       mobileUrl: get(r, "mobileUrl") || "https://himera.mobile.bg",

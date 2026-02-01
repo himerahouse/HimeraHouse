@@ -102,9 +102,10 @@ export default function ContactPage() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    // honeypot spam field
     if (formData.get("company")) {
       setStatus("error");
-      setErrorMsg("Грешка при изпращане. Опитайте отново.");
+      setErrorMsg("Sending failed. Please try again.");
       return;
     }
 
@@ -121,11 +122,11 @@ export default function ContactPage() {
       } else {
         const data = await res.json().catch(() => null);
         setStatus("error");
-        setErrorMsg(data?.error || "Неуспешно изпращане. Опитайте отново.");
+        setErrorMsg(data?.error || "Sending failed. Please try again.");
       }
     } catch {
       setStatus("error");
-      setErrorMsg("Грешка при връзката. Опитайте отново.");
+      setErrorMsg("Connection error. Please try again.");
     }
   }
 
@@ -137,11 +138,10 @@ export default function ContactPage() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight text-gray-900">
-                Контакти
+                Contacts
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-gray-700">
-                Свържете се с нас или ни пишете директно чрез онлайн формата за
-                контакт.
+                Contact us or write to us directly via the online contact form.
               </p>
 
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -151,13 +151,13 @@ export default function ContactPage() {
                   rel="noreferrer"
                   className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
-                  Виж обяви в mobile.bg
+                  View listings on mobile.bg
                 </a>
                 <Link
                   href="/cars"
                   className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
                 >
-                  Разгледай автомобили
+                  Browse cars
                 </Link>
               </div>
             </div>
@@ -168,12 +168,12 @@ export default function ContactPage() {
                   <Icon name="clock" />
                 </span>
                 <span>
-                  <span className="font-semibold text-gray-900">Днес:</span>{" "}
-                  09:00 – 18:00ч.
+                  <span className="font-semibold text-gray-900">Today:</span>{" "}
+                  09:00 – 18:00
                 </span>
               </div>
               <div className="mt-2 text-xs text-gray-600">
-                Работим и в събота/неделя само с предварителна уговорка.
+                We are also open on Saturday/Sunday only by prior arrangement.
               </div>
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function ContactPage() {
             {/* Contact info */}
             <div className="rounded-2xl border border-gray-300 bg-gray-50 p-8 shadow-sm">
               <h2 className="text-xl font-semibold text-gray-900">
-                Информация за контакт
+                Contact information
               </h2>
 
               <div className="mt-6 divide-y divide-gray-200 text-sm">
@@ -197,7 +197,7 @@ export default function ContactPage() {
                   </span>
                   <div>
                     <p className="font-semibold text-gray-900">
-                      Линк към mobile.bg
+                      Link to mobile.bg
                     </p>
                     <a
                       href="https://himera.mobile.bg"
@@ -215,9 +215,9 @@ export default function ContactPage() {
                     <Icon name="pin" />
                   </span>
                   <div>
-                    <p className="font-semibold text-gray-900">Адрес</p>
+                    <p className="font-semibold text-gray-900">Address</p>
                     <p className="mt-1 text-gray-700">
-                      гр. София п.к. 1734, бул. „Симеооновско шосе“ №95
+                      Sofia, postal code 1734, 95 Simeonovsko Shose Boulevard
                     </p>
                   </div>
                 </div>
@@ -227,12 +227,12 @@ export default function ContactPage() {
                     <Icon name="phone" />
                   </span>
                   <div>
-                    <p className="font-semibold text-gray-900">Телефон</p>
+                    <p className="font-semibold text-gray-900">Tel</p>
                     <a
                       href="tel:+359890998837"
                       className="mt-1 inline-block text-gray-800 underline underline-offset-4 hover:text-black"
                     >
-                      0890 99 88 37
+                      +359 890 99 88 37
                     </a>
                   </div>
                 </div>
@@ -242,7 +242,7 @@ export default function ContactPage() {
                     <Icon name="mail" />
                   </span>
                   <div>
-                    <p className="font-semibold text-gray-900">Имейл</p>
+                    <p className="font-semibold text-gray-900">Email</p>
                     <a
                       href="mailto:office@himerahouse.com"
                       className="mt-1 inline-block text-gray-800 underline underline-offset-4 hover:text-black"
@@ -257,22 +257,22 @@ export default function ContactPage() {
             {/* Form */}
             <div className="rounded-2xl border border-gray-300 bg-gray-50 p-8 shadow-sm">
               <h2 className="text-xl font-semibold text-gray-900">
-                Форма за контакт
+                Contact form
               </h2>
               <p className="mt-2 text-sm text-gray-700">
-                Изпратете запитване и ще се свържем с вас възможно най-бързо.
+                Send an inquiry and we will get back to you as soon as possible.
               </p>
 
               {status === "sent" && (
                 <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-                  <span className="font-semibold">Благодарим!</span> Съобщението е
-                  изпратено.
+                  <span className="font-semibold">Thank you!</span> Your message
+                  has been sent.
                 </div>
               )}
 
               {status === "error" && (
                 <div className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">
-                  <span className="font-semibold">Упс!</span> {errorMsg}
+                  <span className="font-semibold">Oops!</span> {errorMsg}
                 </div>
               )}
 
@@ -288,43 +288,45 @@ export default function ContactPage() {
                 <input
                   type="hidden"
                   name="_subject"
-                  value="Ново запитване от сайта"
+                  value="New inquiry from the website"
                 />
 
                 <div>
-                  <label className="text-sm font-medium text-gray-900">Име</label>
+                  <label className="text-sm font-medium text-gray-900">
+                    Name
+                  </label>
                   <input
                     name="name"
                     required
                     disabled={status === "sending"}
                     className="mt-2 h-11 w-full rounded-md border border-gray-300 bg-white px-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200 disabled:cursor-not-allowed disabled:bg-gray-100"
-                    placeholder="Вашето име"
+                    placeholder="Your name"
                   />
                 </div>
 
                 <div>
                   <label className="text-sm font-medium text-gray-900">
-                    Телефон / Имейл
+                    Phone / Email
                   </label>
                   <input
                     name="contact"
                     required
                     disabled={status === "sending"}
                     className="mt-2 h-11 w-full rounded-md border border-gray-300 bg-white px-4 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200 disabled:cursor-not-allowed disabled:bg-gray-100"
-                    placeholder="0890... или email"
+                    placeholder="+359... or email"
                   />
                 </div>
 
                 <div>
                   <label className="text-sm font-medium text-gray-900">
-                    Съобщение
+                    Message
                   </label>
                   <textarea
                     name="message"
                     required
                     disabled={status === "sending"}
                     className="mt-2 min-h-[140px] w-full rounded-md border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-200 disabled:cursor-not-allowed disabled:bg-gray-100"
-                    placeholder="Напишете вашето запитване..."
+                    placeholder="Write your inquiry..."
                   />
                 </div>
 
@@ -333,11 +335,11 @@ export default function ContactPage() {
                   disabled={status === "sending"}
                   className="h-11 w-full rounded-md bg-gray-900 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-300 disabled:cursor-not-allowed disabled:bg-gray-300"
                 >
-                  {status === "sending" ? "Изпращане..." : "Изпрати"}
+                  {status === "sending" ? "Sending..." : "Send"}
                 </button>
 
                 <p className="text-xs text-gray-600">
-                  Или се свържете директно на{" "}
+                  Or contact us directly at{" "}
                   <a
                     href="mailto:office@himerahouse.com"
                     className="underline underline-offset-4 hover:text-black"
@@ -351,31 +353,34 @@ export default function ContactPage() {
 
             {/* Working hours */}
             <div className="rounded-2xl border border-gray-300 bg-gray-50 p-8 shadow-sm">
-              <h2 className="text-xl font-semibold text-gray-900">Работно време</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Office hours
+              </h2>
               <div className="mt-5 space-y-3 text-sm text-gray-700">
                 <p>
                   <span className="font-semibold text-gray-900">
-                    Понеделник - Петък:
+                    Monday through Friday:
                   </span>{" "}
-                  09:00 - 18:00ч.
+                  09:00 - 18:00
                 </p>
                 <p>
-                  <span className="font-semibold text-gray-900">Събота:</span>{" "}
-                  Почивен ден (работим с предварителна уговорка)
+                  <span className="font-semibold text-gray-900">Saturday:</span>{" "}
+                  day off (although we may be opened based on a prior
+                  arrangement)
                 </p>
                 <p>
-                  <span className="font-semibold text-gray-900">Неделя:</span>{" "}
-                  Почивен ден (работим с предварителна уговорка)
+                  <span className="font-semibold text-gray-900">Sunday:</span>{" "}
+                  day off (although we may be opened based on a prior
+                  arrangement)
                 </p>
               </div>
             </div>
 
             {/* Spacer card on the right */}
             <div className="hidden lg:block rounded-2xl border border-gray-300 bg-gray-50 p-8 shadow-sm">
-              <h2 className="text-xl font-semibold text-gray-900">Бързи връзки</h2>
+              <h2 className="text-xl font-semibold text-gray-900">Quick links</h2>
               <p className="mt-2 text-sm text-gray-700">
-                Ако предпочитате, разгледайте наличните автомобили или пишете
-                директно.
+                If you prefer, browse the available cars or write to us directly.
               </p>
               <div className="mt-5 flex flex-col gap-3">
                 <a
@@ -384,13 +389,13 @@ export default function ContactPage() {
                   rel="noreferrer"
                   className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white shadow-sm hover:bg-black"
                 >
-                  Mobile.bg профил
+                  mobile.bg profile
                 </a>
                 <Link
                   href="/cars"
                   className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50"
                 >
-                  Всички автомобили
+                  All cars
                 </Link>
               </div>
             </div>
@@ -398,9 +403,9 @@ export default function ContactPage() {
             {/* Map */}
             <div className="lg:col-span-2 overflow-hidden rounded-2xl border border-gray-300 bg-gray-50 shadow-sm">
               <div className="px-8 pt-8">
-                <h2 className="text-xl font-semibold text-gray-900">Локация</h2>
+                <h2 className="text-xl font-semibold text-gray-900">Location</h2>
                 <p className="mt-2 text-sm text-gray-700">
-                  Отворете картата за навигация.
+                  Open the map for navigation.
                 </p>
               </div>
               <div className="mt-6 h-[380px] w-full">

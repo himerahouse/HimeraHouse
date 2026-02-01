@@ -9,12 +9,7 @@ function Icon({
   switch (name) {
     case "car":
       return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M3 14v-2a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v2"
             stroke="currentColor"
@@ -41,14 +36,10 @@ function Icon({
           />
         </svg>
       );
+
     case "handshake":
       return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M7 13l3 3a2 2 0 0 0 3 0l4-4a2 2 0 0 0 0-3l-1-1"
             stroke="currentColor"
@@ -70,14 +61,10 @@ function Icon({
           />
         </svg>
       );
+
     case "shield":
       return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M12 2 20 6v7c0 5-3.5 9-8 9s-8-4-8-9V6l8-4Z"
             stroke="currentColor"
@@ -93,14 +80,10 @@ function Icon({
           />
         </svg>
       );
+
     case "leasing":
       return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M6 3h12a2 2 0 0 1 2 2v16H4V5a2 2 0 0 1 2-2Z"
             stroke="currentColor"
@@ -114,14 +97,10 @@ function Icon({
           />
         </svg>
       );
+
     case "truck":
       return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M3 16V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10"
             stroke="currentColor"
@@ -142,14 +121,10 @@ function Icon({
           />
         </svg>
       );
+
     case "kat":
       return (
-        <svg
-          className={common}
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
+        <svg className={common} viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="M4 10.5 12 4l8 6.5V20a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20v-9.5Z"
             stroke="currentColor"
@@ -168,22 +143,22 @@ function Icon({
 
 const highlights = [
   {
-    title: "Качествени автомобили",
-    desc: "Внасяме само проверени и надеждни автомобили.",
+    title: "Quality cars",
+    desc: "We import only tested and reliable vehicles.",
     icon: "car" as const,
   },
   {
-    title: "Индивидуален подход",
-    desc: "Разбираме нуждите на всеки клиент и предлагаме персонализирани решения.",
+    title: "Individual approach",
+    desc: "We understand the needs of each client and provide personalized solutions.",
     icon: "handshake" as const,
   },
   {
-    title: "Прозрачност и доверие",
-    desc: "Гаранция за качество и ясни условия на покупка.",
+    title: "Transparency and trust",
+    desc: "Quality guarantee and clear purchase terms.",
     icon: "shield" as const,
   },
   {
-    title: "Индивидуален лизинг с одобрение в рамките на деня",
+    title: "Individual leasing approved within one day",
     desc: "",
     icon: "leasing" as const,
   },
@@ -191,25 +166,25 @@ const highlights = [
 
 const services = [
   {
-    title: "Внос по заявка",
-    desc: "Намираме автомобил/техника според изискванията и организираме доставка.",
+    title: "Import on request",
+    desc: "We find a car/vehicle according to your requirements and organize delivery.",
     icon: "truck" as const,
     href: "/services",
-    linkLabel: "Виж услуги",
+    linkLabel: "View services",
   },
   {
-    title: "Регистрация в КАТ",
-    desc: "Ние организираме всички документи и наш представител регистрира автомобила без да чакате на опашки и да губите време.",
+    title: "Registration at KAT",
+    desc: "We organize all documents and our representative registers the vehicle for you, without waiting in lines and wasting time.",
     icon: "kat" as const,
     href: "/services",
-    linkLabel: "Как работи",
+    linkLabel: "How it works",
   },
   {
-    title: "Лизинг",
-    desc: "Индивидуален лизинг спрямо месечния Ви бюджет и Вашите изисквания за първоначална вноска.",
+    title: "Leasing",
+    desc: "Personalized leasing tailored to your monthly budget and your requirements for the initial down payment.",
     icon: "leasing" as const,
     href: "/leasing",
-    linkLabel: "Лизинг условия",
+    linkLabel: "Leasing terms",
   },
 ];
 
@@ -225,14 +200,13 @@ export default function Home() {
               <p className="text-sm font-medium text-gray-600">HIMERA HOUSE</p>
 
               <h1 className="mt-3 text-4xl font-semibold leading-tight tracking-tight text-gray-900 sm:text-5xl">
-                Вашият доверен партньор за внос и продажба на автомобили
+                Welcome to HIMERA HOUSE – Your trusted partner in the import and sale of cars
               </h1>
 
               <p className="mt-5 text-base leading-relaxed text-gray-700">
-                Ние от „Химера Хаус“ ЕООД се стремим да предоставим отлично
-                обслужване в сферата на автомобилната търговия. Предлагаме
-                внимателно подбрани автомобили на конкурентни цени, съобразени с
-                вашите изисквания и бюджет.
+                At Himera House Ltd. we strive to provide excellent service in the field of automotive trade.
+                We offer a carefully selected range of high-quality cars at competitive prices, tailored to
+                your requirements and budget.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -240,24 +214,22 @@ export default function Home() {
                   href="/cars"
                   className="inline-flex items-center justify-center rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-gray-300"
                 >
-                  Виж автомобили
+                  View cars
                 </Link>
                 <Link
                   href="/contact"
                   className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
                 >
-                  Запитване
+                  Inquiry
                 </Link>
               </div>
             </div>
 
             {/* Right: Quick card */}
             <div className="rounded-2xl border border-gray-300 bg-gray-100 p-8 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-900">
-                Бързи действия
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900">Quick actions</h2>
               <p className="mt-2 text-sm text-gray-700">
-                Кажете ни какво търсите и ще предложим вариант според бюджета ви.
+                Tell us what you are looking for and we will offer a solution tailored to your budget.
               </p>
 
               <div className="mt-6 space-y-3">
@@ -265,19 +237,19 @@ export default function Home() {
                   href="/cars"
                   className="inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-4 py-3 text-sm font-medium text-white shadow-sm hover:bg-black"
                 >
-                  Налични автомобили
+                  Available cars
                 </Link>
                 <Link
                   href="/leasing"
                   className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50"
                 >
-                  Лизинг оферта
+                  Leasing offer
                 </Link>
                 <Link
                   href="/contact"
                   className="inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50"
                 >
-                  Свържи се с нас
+                  Contact us
                 </Link>
               </div>
             </div>
@@ -290,19 +262,16 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 py-14">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Защо да изберете нас
-              </h2>
+              <h2 className="text-2xl font-semibold text-gray-900">Why choose us</h2>
               <p className="mt-2 max-w-2xl text-sm text-gray-700">
-                Комбинация от проверени автомобили, прозрачност и съдействие по
-                целия процес.
+                A combination of tested vehicles, transparency, and full support throughout the entire process.
               </p>
             </div>
             <Link
               href="/services"
               className="text-sm font-medium text-gray-900 underline underline-offset-4 hover:text-black"
             >
-              Виж всички услуги
+              View all services
             </Link>
           </div>
 
@@ -317,12 +286,8 @@ export default function Home() {
                     <Icon name={h.icon} />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">
-                      {h.title}
-                    </p>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-700">
-                      {h.desc}
-                    </p>
+                    <p className="text-sm font-semibold text-gray-900">{h.title}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-700">{h.desc}</p>
                   </div>
                 </div>
               </div>
@@ -334,12 +299,9 @@ export default function Home() {
       {/* Services preview */}
       <section className="bg-gray-100">
         <div className="mx-auto max-w-7xl px-6 py-14">
-          <h2 className="text-2xl font-semibold text-gray-900">
-            С какво можем да помогнем
-          </h2>
+          <h2 className="text-2xl font-semibold text-gray-900">How we can help</h2>
           <p className="mt-2 max-w-3xl text-sm text-gray-700">
-            Внос по заявка, регистрация, транспорт, застраховки и лизинг – всичко
-            на едно място.
+            Import on request, registration, transport, insurance, and leasing – everything in one place.
           </p>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-3">
@@ -353,12 +315,8 @@ export default function Home() {
                     <Icon name={s.icon} />
                   </span>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {s.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-700">
-                      {s.desc}
-                    </p>
+                    <h3 className="text-lg font-semibold text-gray-900">{s.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-700">{s.desc}</p>
                     <div className="mt-4">
                       <Link
                         href={s.href}
@@ -379,10 +337,9 @@ export default function Home() {
       <section className="bg-gray-100">
         <div className="mx-auto max-w-7xl px-6 pb-14">
           <div className="rounded-2xl border border-gray-200 bg-gray-900 p-10 text-white shadow-sm">
-            <h3 className="text-2xl font-semibold">Готови ли сте да започнем?</h3>
+            <h3 className="text-2xl font-semibold">Ready to get started?</h3>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">
-              Изпратете запитване и ще ви помогнем да намерите автомобил според
-              вашия бюджет и изисквания.
+              Send us an inquiry and we will help you find a car that fits your budget and requirements.
             </p>
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -390,19 +347,19 @@ export default function Home() {
                 href="/contact"
                 className="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-sm font-medium text-gray-900 hover:bg-gray-100"
               >
-                Контакти
+                Contact
               </Link>
               <Link
                 href="/cars"
                 className="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-sm font-medium text-white hover:bg-white/10"
               >
-                Разгледай автомобили
+                Browse cars
               </Link>
               <Link
                 href="/leasing"
                 className="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-sm font-medium text-white hover:bg-white/10"
               >
-                Лизинг
+                Leasing
               </Link>
             </div>
           </div>
