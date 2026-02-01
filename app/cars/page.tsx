@@ -117,7 +117,6 @@ function CarCard({ car }: { car: SheetCar }) {
           </div>
         )}
 
-        {/* Arrows */}
         {canNav && (
           <>
             <button
@@ -156,7 +155,6 @@ function CarCard({ car }: { car: SheetCar }) {
           </>
         )}
 
-        {/* Dots */}
         {canNav && (
           <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
             <div className="flex gap-1.5 rounded-full bg-black/35 px-3 py-1.5 backdrop-blur">
@@ -209,7 +207,6 @@ export default function CarsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [query, setQuery] = useState("");
   const [fuel, setFuel] = useState("all");
   const [trans, setTrans] = useState("all");
 
@@ -228,19 +225,15 @@ export default function CarsPage() {
   }, []);
 
   const filtered = useMemo(() => {
-    const q = query.toLowerCase();
     return cars.filter((c) => {
       const fuelOk =
         fuel === "all" || extractFuelFromSubtitle(c.subtitle) === fuel;
       const transOk =
         trans === "all" || extractTransFromSubtitle(c.subtitle) === trans;
-      const textOk =
-        !q ||
-        c.title.toLowerCase().includes(q) ||
-        (c.subtitle ?? "").toLowerCase().includes(q);
-      return fuelOk && transOk && textOk;
+
+      return fuelOk && transOk;
     });
-  }, [cars, query, fuel, trans]);
+  }, [cars, fuel, trans]);
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -251,14 +244,7 @@ export default function CarsPage() {
             Разгледайте актуалните предложения или посетете mobile.bg.
           </p>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Търсене..."
-              className="h-11 rounded-md border border-gray-300 bg-white px-4 text-sm focus:ring-2 focus:ring-gray-200"
-            />
-
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <select
               value={fuel}
               onChange={(e) => setFuel(e.target.value)}
@@ -266,7 +252,9 @@ export default function CarsPage() {
             >
               <option value="all">Гориво (всички)</option>
               {FUEL_OPTIONS.map((f) => (
-                <option key={f}>{f}</option>
+                <option key={f} value={f}>
+                  {f}
+                </option>
               ))}
             </select>
 
@@ -277,7 +265,9 @@ export default function CarsPage() {
             >
               <option value="all">Скоростна кутия</option>
               {TRANS_OPTIONS.map((t) => (
-                <option key={t}>{t}</option>
+                <option key={t} value={t}>
+                  {t}
+                </option>
               ))}
             </select>
 
