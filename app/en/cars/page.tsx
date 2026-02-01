@@ -7,10 +7,6 @@ import type { SheetCar } from "../../../lib/carsFromSheet";
 
 const MOBILE_BG = "https://himera.mobile.bg";
 
-// UI options in EN
-const FUEL_OPTIONS = ["Petrol", "Diesel", "Hybrid", "Electric"] as const;
-const TRANS_OPTIONS = ["Automatic", "Manual"] as const;
-
 function statusLabel(status?: SheetCar["status"]) {
   switch (status) {
     case "available":
@@ -39,23 +35,6 @@ function statusClass(status?: SheetCar["status"]) {
     default:
       return "bg-gray-100 text-gray-700 border-gray-300";
   }
-}
-
-// Extractors still read BG subtitle, but RETURN EN values to match the select options
-function extractFuelFromSubtitle(subtitle?: string) {
-  const s = (subtitle ?? "").toLowerCase();
-  if (s.includes("диз")) return "Diesel";
-  if (s.includes("бенз")) return "Petrol";
-  if (s.includes("хиб")) return "Hybrid";
-  if (s.includes("елект")) return "Electric";
-  return "";
-}
-
-function extractTransFromSubtitle(subtitle?: string) {
-  const s = (subtitle ?? "").toLowerCase();
-  if (s.includes("авто")) return "Automatic";
-  if (s.includes("ръч")) return "Manual";
-  return "";
 }
 
 function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
@@ -214,10 +193,6 @@ export default function CarsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // removed query state
-  const [fuel, setFuel] = useState("all");
-  const [trans, setTrans] = useState("all");
-
   useEffect(() => {
     (async () => {
       try {
@@ -232,17 +207,6 @@ export default function CarsPage() {
     })();
   }, []);
 
-  const filtered = useMemo(() => {
-    return cars.filter((c) => {
-      const fuelOk =
-        fuel === "all" || extractFuelFromSubtitle(c.subtitle) === fuel;
-      const transOk =
-        trans === "all" || extractTransFromSubtitle(c.subtitle) === trans;
-
-      return fuelOk && transOk;
-    });
-  }, [cars, fuel, trans]);
-
   return (
     <main className="min-h-screen bg-gray-100">
       <section className="border-b border-gray-300 bg-gray-100">
@@ -256,39 +220,12 @@ export default function CarsPage() {
               : "Разгледайте актуалните предложения или посетете mobile.bg."}
           </p>
 
-          {/* Only filters + mobile.bg button */}
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <select
-              value={fuel}
-              onChange={(e) => setFuel(e.target.value)}
-              className="h-11 rounded-md border border-gray-300 bg-white px-4 text-sm"
-            >
-              <option value="all">Fuel (all)</option>
-              {FUEL_OPTIONS.map((f) => (
-                <option key={f} value={f}>
-                  {f}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={trans}
-              onChange={(e) => setTrans(e.target.value)}
-              className="h-11 rounded-md border border-gray-300 bg-white px-4 text-sm"
-            >
-              <option value="all">Transmission (all)</option>
-              {TRANS_OPTIONS.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-
+          <div className="mt-6">
             <a
               href={MOBILE_BG}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-11 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-white hover:bg-black"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-gray-900 px-6 text-sm font-medium text-white hover:bg-black"
             >
               Mobile.bg
             </a>
@@ -308,7 +245,7 @@ export default function CarsPage() {
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((car) => (
+              {cars.map((car) => (
                 <CarCard key={car.id} car={car} isEN={isEN} />
               ))}
             </div>
