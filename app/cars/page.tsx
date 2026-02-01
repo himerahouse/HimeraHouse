@@ -62,7 +62,11 @@ function CarCard({ car }: { car: SheetCar }) {
   const images = useMemo(() => {
     const arr = Array.isArray(car.images) ? car.images : [];
     return Array.from(
-      new Set(arr.map((x) => (typeof x === "string" ? x.trim() : "")).filter(Boolean))
+      new Set(
+        arr
+          .map((x) => (typeof x === "string" ? x.trim() : ""))
+          .filter(Boolean)
+      )
     );
   }, [car.images]);
 
@@ -77,6 +81,18 @@ function CarCard({ car }: { car: SheetCar }) {
     !raw || raw.includes("example.com") || raw.includes("drive.google.com")
       ? "/cars/placeholder.png"
       : raw;
+
+  const canNav = images.length > 1;
+
+  function prev() {
+    if (!canNav) return;
+    setActive((i) => (i - 1 + images.length) % images.length);
+  }
+
+  function next() {
+    if (!canNav) return;
+    setActive((i) => (i + 1) % images.length);
+  }
 
   return (
     <article className="overflow-hidden rounded-2xl border border-gray-300 bg-gray-50 shadow-sm">
@@ -100,6 +116,64 @@ function CarCard({ car }: { car: SheetCar }) {
             </span>
           </div>
         )}
+
+        {/* Arrows */}
+        {canNav && (
+          <>
+            <button
+              type="button"
+              aria-label="Предишна снимка"
+              onClick={prev}
+              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white backdrop-blur hover:bg-black/60"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M15 18l-6-6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              aria-label="Следваща снимка"
+              onClick={next}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white backdrop-blur hover:bg-black/60"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 6l6 6-6 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </>
+        )}
+
+        {/* Dots */}
+        {canNav && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
+            <div className="flex gap-1.5 rounded-full bg-black/35 px-3 py-1.5 backdrop-blur">
+              {images.slice(0, 8).map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`Отиди на снимка ${i + 1}`}
+                  onClick={() => setActive(i)}
+                  className={`h-2 w-2 rounded-full transition ${
+                    i === active ? "bg-white" : "bg-white/50 hover:bg-white/80"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="p-6">
@@ -108,7 +182,9 @@ function CarCard({ car }: { car: SheetCar }) {
 
         <div className="mt-6 flex items-center justify-between gap-3">
           <div>
-            <div className="text-xs uppercase tracking-wide text-gray-500">Цена</div>
+            <div className="text-xs uppercase tracking-wide text-gray-500">
+              Цена
+            </div>
             <div className="text-lg font-semibold text-gray-900">
               {car.price || "По запитване"}
             </div>
