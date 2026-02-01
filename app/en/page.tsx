@@ -205,8 +205,7 @@ export default function Home() {
 
               <p className="mt-5 text-base leading-relaxed text-gray-700">
                 At Himera House Ltd. we strive to provide excellent service in the field of automotive trade.
-                We offer a carefully selected range of high-quality cars at competitive prices, tailored to
-                your requirements and budget.
+                We offer a broad selection of high-quality cars at competitive prices, tailored to your requirements and budget.
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
