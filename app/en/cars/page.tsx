@@ -40,48 +40,63 @@ function statusClass(status?: SheetCar["status"]) {
 function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
   const badge = statusLabel(car.status);
 
+  // Process images to ensure we get all of them properly
   const images = useMemo(() => {
     const arr = Array.isArray(car.images) ? car.images : [];
-    return Array.from(
-      new Set(
-        arr
-          .map((x) => (typeof x === "string" ? x.trim() : ""))
-          .filter(Boolean)
-      )
-    );
+    // Filter out empty strings and invalid URLs
+    return arr
+      .map((x) => (typeof x === "string" ? x.trim() : ""))
+      .filter((url) => 
+        url && 
+        !url.includes("example.com") && 
+        !url.includes("drive.google.com")
+      );
   }, [car.images]);
 
-  const [active, setActive] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
+  // Reset active index if it becomes invalid
   useEffect(() => {
-    if (active > images.length - 1) setActive(0);
-  }, [images.length, active]);
+    if (images.length === 0) return;
+    if (activeIndex >= images.length) {
+      setActiveIndex(0);
+    }
+  }, [images.length, activeIndex]);
 
-  const raw = images.length ? images[active] : "";
-  const img =
-    !raw || raw.includes("example.com") || raw.includes("drive.google.com")
-      ? "/cars/placeholder.png"
-      : raw;
+  // Get current image URL or placeholder
+  const currentImage = images.length > 0 && activeIndex < images.length
+    ? images[activeIndex]
+    : "/cars/placeholder.png";
 
   const subtitleToShow = isEN ? car.engSubtitle || car.subtitle : car.subtitle;
-
   const canNav = images.length > 1;
 
   function prev() {
     if (!canNav) return;
-    setActive((i) => (i - 1 + images.length) % images.length);
+    setActiveIndex((current) => 
+      current === 0 ? images.length - 1 : current - 1
+    );
   }
 
   function next() {
     if (!canNav) return;
-    setActive((i) => (i + 1) % images.length);
+    setActiveIndex((current) => 
+      current === images.length - 1 ? 0 : current + 1
+    );
+  }
+
+  function goToImage(index: number) {
+    if (index >= 0 && index < images.length) {
+      setActiveIndex(index);
+    }
   }
 
   return (
     <article className="overflow-hidden rounded-2xl border border-gray-300 bg-gray-50 shadow-sm">
       <div className="relative h-56 w-full bg-gray-200">
         <Image
-          src={img}
+          key={currentImage} // Force re-render when image changes
+          src={currentImage}
           alt={car.title}
           fill
           className="object-cover"
@@ -106,7 +121,7 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
               type="button"
               aria-label="Previous image"
               onClick={prev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white backdrop-blur hover:bg-black/60"
+              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white backdrop-blur hover:bg-black/60 transition-colors z-10"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path
@@ -123,7 +138,7 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
               type="button"
               aria-label="Next image"
               onClick={next}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white backdrop-blur hover:bg-black/60"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white backdrop-blur hover:bg-black/60 transition-colors z-10"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path
@@ -138,20 +153,27 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
           </>
         )}
 
-        {canNav && (
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
+        {canNav && images.length > 0 && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10">
             <div className="flex gap-1.5 rounded-full bg-black/35 px-3 py-1.5 backdrop-blur">
-              {images.slice(0, 8).map((_, i) => (
+              {images.slice(0, 8).map((_, index) => (
                 <button
-                  key={i}
+                  key={index}
                   type="button"
-                  aria-label={`Go to image ${i + 1}`}
-                  onClick={() => setActive(i)}
-                  className={`h-2 w-2 rounded-full transition ${
-                    i === active ? "bg-white" : "bg-white/50 hover:bg-white/80"
+                  aria-label={`Go to image ${index + 1}`}
+                  onClick={() => goToImage(index)}
+                  className={`h-2 w-2 rounded-full transition-all ${
+                    index === activeIndex 
+                      ? "bg-white scale-125" 
+                      : "bg-white/50 hover:bg-white/80"
                   }`}
                 />
               ))}
+              {images.length > 8 && (
+                <span className="text-xs text-white/70 ml-1">
+                  +{images.length - 8}
+                </span>
+              )}
             </div>
           </div>
         )}
@@ -175,7 +197,7 @@ function CarCard({ car, isEN }: { car: SheetCar; isEN: boolean }) {
             href={car.mobileUrl || MOBILE_BG}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white hover:bg-black"
+            className="inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-xs font-medium text-white hover:bg-black transition-colors"
           >
             {isEN ? "View on mobile.bg" : "Виж в mobile.bg"}
           </a>
@@ -225,7 +247,7 @@ export default function CarsPage() {
               href={MOBILE_BG}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-11 items-center justify-center rounded-md bg-gray-900 px-6 text-sm font-medium text-white hover:bg-black"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-gray-900 px-6 text-sm font-medium text-white hover:bg-black transition-colors"
             >
               Mobile.bg
             </a>

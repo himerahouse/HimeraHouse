@@ -5,7 +5,7 @@ export type SheetCar = {
   id: string;
   title: string;
   subtitle: string;
-  engSubtitle?: string; // ✅ NEW
+  engSubtitle?: string;
   price: string;
   images: string[];
   mobileUrl: string;
@@ -41,6 +41,15 @@ export async function fetchCarsFromSheet(): Promise<SheetCar[]> {
   const idx = (name: string) => header.indexOf(name);
   const get = (r: string[], name: string) => (r[idx(name)] ?? "").trim();
 
+  const imageIndexes = header
+    .map((h, i) => ({ h: h.trim().toLowerCase(), i }))
+    .filter(({ h }) => /^image\d+$/.test(h))
+    .sort((a, b) => {
+      const aNum = Number(a.h.replace("image", ""));
+      const bNum = Number(b.h.replace("image", ""));
+      return aNum - bNum;
+    });
+
   const cars: SheetCar[] = [];
 
   for (const r of rows.slice(1)) {
@@ -48,9 +57,9 @@ export async function fetchCarsFromSheet(): Promise<SheetCar[]> {
     const title = get(r, "title");
     if (!id || !title) continue;
 
-    const images = [get(r, "image1"), get(r, "image2"), get(r, "image3")].filter(
-      Boolean
-    );
+    const images = imageIndexes
+      .map(({ i }) => (r[i] ?? "").trim())
+      .filter(Boolean);
 
     const year = num(get(r, "year"));
     const mileageKm = num(get(r, "mileageKm"));
@@ -65,13 +74,13 @@ export async function fetchCarsFromSheet(): Promise<SheetCar[]> {
         : undefined;
 
     const subtitle = get(r, "subtitle");
-    const engSubtitle = get(r, "engSubtitle"); // ✅ NEW (must match sheet header exactly)
+    const engSubtitle = get(r, "engSubtitle");
 
     cars.push({
       id,
       title,
       subtitle,
-      engSubtitle: engSubtitle || undefined, // ✅ NEW
+      engSubtitle: engSubtitle || undefined,
       price: get(r, "price") || "По запитване",
       images,
       mobileUrl: get(r, "mobileUrl") || "https://himera.mobile.bg",
